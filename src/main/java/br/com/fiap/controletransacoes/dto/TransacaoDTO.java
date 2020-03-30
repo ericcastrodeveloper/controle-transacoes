@@ -1,35 +1,43 @@
 package br.com.fiap.controletransacoes.dto;
 
+import br.com.fiap.controletransacoes.entity.ProdutoEntity;
 import br.com.fiap.controletransacoes.entity.TransacaoEntity;
 import lombok.Data;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class TransacaoDTO {
 
     private ClienteDTO clienteDTO;
-    private ProdutoDTO produtoDTO;
+    private List<ProdutoDTO> listProdutoDTO;
     private ZonedDateTime dataTransacao;
 
     public TransacaoDTO() {
     }
 
-    public TransacaoDTO(ClienteDTO clienteDTO, ProdutoDTO produtoDTO) {
-        this.clienteDTO = clienteDTO;
-        this.produtoDTO = produtoDTO;
-    }
 
     public TransacaoDTO(TransacaoEntity transacaoEntity) {
         this.setClienteDTO(new ClienteDTO());
-        this.setProdutoDTO(new ProdutoDTO());
         this.getClienteDTO().setCpf(transacaoEntity.getCliente().getCpf());
         this.getClienteDTO().setNome(transacaoEntity.getCliente().getNome());
-        this.getProdutoDTO().setNome(transacaoEntity.getProduto().getNome());
-        this.getProdutoDTO().setQuantidade(transacaoEntity.getProduto().getQuantidade());
-        this.getProdutoDTO().setValor(transacaoEntity.getProduto().getValor());
+
+        List<ProdutoDTO> listaProdutoDTO = new ArrayList<>();
+
+        for(ProdutoEntity produtoEntity : transacaoEntity.getListaProduto()){
+            ProdutoDTO produtoDTO = new ProdutoDTO();
+            produtoDTO.setNome(produtoEntity.getNome());
+            produtoDTO.setQuantidade(produtoEntity.getQuantidade());
+            produtoDTO.setValor(produtoEntity.getValor());
+            listaProdutoDTO.add(produtoDTO);
+        }
+
+        this.setListProdutoDTO(listaProdutoDTO);
+
         this.setDataTransacao(convertToZonedDateTime(transacaoEntity.getDataTransacao()));
     }
 
@@ -44,7 +52,7 @@ public class TransacaoDTO {
     public String toString() {
         return "Transacao:" +
                 "\r\n" + clienteDTO +
-                "\r\n" + produtoDTO +
+                "\r\n" + listProdutoDTO +
                 "\r\ndataTransacao=" + dataTransacao +
                 "\r\n";
     }

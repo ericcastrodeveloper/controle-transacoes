@@ -27,6 +27,6 @@ public class ProdutoDTO {
                 "nome='" + nome + '\'' +
                 ", valor=" + valor +
                 ", quantidade=" + quantidade +
-                '}';
+                "}\n\r";
     }
 }

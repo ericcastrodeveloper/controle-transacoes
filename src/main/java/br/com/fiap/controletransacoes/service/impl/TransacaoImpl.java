@@ -2,10 +2,12 @@ package br.com.fiap.controletransacoes.service.impl;
 
 import br.com.fiap.controletransacoes.dto.TransacaoDTO;
 import br.com.fiap.controletransacoes.entity.ClienteEntity;
+import br.com.fiap.controletransacoes.entity.ProdutoEntity;
 import br.com.fiap.controletransacoes.entity.TransacaoEntity;
 import br.com.fiap.controletransacoes.repository.ClienteRepository;
 import br.com.fiap.controletransacoes.repository.TransacaoRepository;
 import br.com.fiap.controletransacoes.service.TransacaoService;
+import br.com.fiap.controletransacoes.util.ProdutoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -14,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.xml.ws.Response;
 import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,12 +49,11 @@ public class TransacaoImpl implements TransacaoService {
     public TransacaoDTO atualizarTransacao( Integer id, TransacaoDTO transacaoDTO){
         TransacaoEntity transacaoEntity = transacaoRepository.findById(id).get();
 
-        transacaoEntity.getCliente().setNome(transacaoDTO.getClienteDTO().getNome());
-        transacaoEntity.getCliente().setCpf(transacaoDTO.getClienteDTO().getCpf());
+        List<ProdutoEntity> listProdutoEntity = ProdutoMapper.toEntity(transacaoDTO.getListProdutoDTO());
 
-        transacaoEntity.getProduto().setNome(transacaoDTO.getProdutoDTO().getNome());
-        transacaoEntity.getProduto().setQuantidade(transacaoDTO.getProdutoDTO().getQuantidade());
-        transacaoEntity.getProduto().setValor(transacaoDTO.getProdutoDTO().getValor());
+        transacaoEntity.setListaProduto(listProdutoEntity);
+
+        transacaoEntity.setCliente(new ClienteEntity(transacaoDTO.getClienteDTO()));
 
         return new TransacaoDTO(transacaoRepository.save(transacaoEntity));
     }
