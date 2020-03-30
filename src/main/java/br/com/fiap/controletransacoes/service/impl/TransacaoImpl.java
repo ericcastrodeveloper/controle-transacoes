@@ -4,16 +4,12 @@ import br.com.fiap.controletransacoes.dto.TransacaoDTO;
 import br.com.fiap.controletransacoes.entity.ClienteEntity;
 import br.com.fiap.controletransacoes.entity.ProdutoEntity;
 import br.com.fiap.controletransacoes.entity.TransacaoEntity;
+import br.com.fiap.controletransacoes.mapper.ProdutoMapper;
 import br.com.fiap.controletransacoes.repository.ClienteRepository;
 import br.com.fiap.controletransacoes.repository.TransacaoRepository;
 import br.com.fiap.controletransacoes.service.TransacaoService;
-import br.com.fiap.controletransacoes.util.ProdutoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -64,12 +60,12 @@ public class TransacaoImpl implements TransacaoService {
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> getExtrato(String cpf){
+    public InputStreamResource getExtrato(String cpf){
 
 
         List<TransacaoDTO> listTransacao = getByCliente(cpf);
 
-        if(listTransacao != null){
+        if(listTransacao.size() > 0){
 
             File file = escreverExtrato(listTransacao);
             InputStreamResource resource = null;
@@ -82,16 +78,9 @@ public class TransacaoImpl implements TransacaoService {
             }
 
 
-            return ResponseEntity.ok()
-                    // Content-Disposition
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
-                    // Content-Type
-                    .contentType(MediaType.parseMediaType("application/octet-stream"))
-                    // Contet-Length
-                    .contentLength(file.length()) //
-                    .body(resource);
+            return resource;
         }
-        return new ResponseEntity<InputStreamResource>(HttpStatus.NO_CONTENT);
+        return null;
     }
 
     private File escreverExtrato(List<TransacaoDTO> listTransacao) {

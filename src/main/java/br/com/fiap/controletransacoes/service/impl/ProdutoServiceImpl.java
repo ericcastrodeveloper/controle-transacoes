@@ -34,7 +34,6 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public ProdutoDTO atualizarProduto(Integer id, ProdutoDTO produtoDTO) {
-
         ProdutoEntity produtoEntity = produtoRepository.findById(id).get();
         produtoEntity.setValor(produtoDTO.getValor());
         produtoEntity.setNome(produtoDTO.getNome());

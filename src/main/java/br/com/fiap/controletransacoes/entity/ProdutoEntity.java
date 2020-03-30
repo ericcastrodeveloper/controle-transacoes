@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Table(name = "TB_PRODUTO")
@@ -17,6 +18,8 @@ public class ProdutoEntity {
     private String nome;
     private BigDecimal valor;
     private Integer quantidade;
+    @ManyToMany(mappedBy = "listaProduto", cascade = CascadeType.ALL)
+    private List<TransacaoEntity> listTransacaoEntity;
 
     public ProdutoEntity() {
     }

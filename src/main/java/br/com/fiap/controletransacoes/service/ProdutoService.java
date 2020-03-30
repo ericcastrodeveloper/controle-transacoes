@@ -1,8 +1,6 @@
 package br.com.fiap.controletransacoes.service;
 
-import br.com.fiap.controletransacoes.dto.ClienteDTO;
 import br.com.fiap.controletransacoes.dto.ProdutoDTO;
-import br.com.fiap.controletransacoes.dto.TransacaoDTO;
 
 import java.util.List;
 

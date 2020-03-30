@@ -1,4 +1,4 @@
-package br.com.fiap.controletransacoes.util;
+package br.com.fiap.controletransacoes.mapper;
 
 import br.com.fiap.controletransacoes.dto.ProdutoDTO;
 import br.com.fiap.controletransacoes.entity.ProdutoEntity;

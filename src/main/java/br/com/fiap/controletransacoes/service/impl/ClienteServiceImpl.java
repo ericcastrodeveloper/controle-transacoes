@@ -1,7 +1,6 @@
 package br.com.fiap.controletransacoes.service.impl;
 
 import br.com.fiap.controletransacoes.dto.ClienteDTO;
-import br.com.fiap.controletransacoes.dto.TransacaoDTO;
 import br.com.fiap.controletransacoes.entity.ClienteEntity;
 import br.com.fiap.controletransacoes.repository.ClienteRepository;
 import br.com.fiap.controletransacoes.service.ClienteService;

@@ -24,6 +24,9 @@ public class TransacaoEntity {
     @ManyToOne
     private ClienteEntity cliente;
     @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="TB_TRANSACAO_PRODUTO",
+            joinColumns={@JoinColumn(name="TRANSACAO_ID")},
+            inverseJoinColumns={@JoinColumn(name="PRODUTO_ID")})
     private List<ProdutoEntity> listaProduto;
     @Column(name = "data_transacao")
     @CreatedDate

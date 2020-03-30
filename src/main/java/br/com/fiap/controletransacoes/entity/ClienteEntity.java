@@ -3,7 +3,9 @@ package br.com.fiap.controletransacoes.entity;
 import br.com.fiap.controletransacoes.dto.ClienteDTO;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @Table(name = "TB_CLIENTE")
