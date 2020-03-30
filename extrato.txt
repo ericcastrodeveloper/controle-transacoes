@@ -1,0 +1,31 @@
+Transacao:
+Cliente{nome='Eric', cpf='43738075828'}
+Produto{nome='Teste', valor=5000.00, quantidade=5}
+2020-03-30T00:06:33.957-03:00[America/Sao_Paulo]
+
+
+Transacao:
+Cliente{nome='Eric', cpf='43738075828'}
+Produto{nome='Teste', valor=5000.00, quantidade=5}
+2020-03-30T00:06:34.475-03:00[America/Sao_Paulo]
+
+
+Transacao:
+Cliente{nome='Eric', cpf='43738075828'}
+Produto{nome='Teste', valor=5000.00, quantidade=5}
+2020-03-30T00:06:34.873-03:00[America/Sao_Paulo]
+
+
+Transacao:
+Cliente{nome='Eric', cpf='43738075828'}
+Produto{nome='Teste', valor=5000.00, quantidade=5}
+2020-03-30T00:06:35.219-03:00[America/Sao_Paulo]
+
+
+Transacao:
+Cliente{nome='Eric', cpf='43738075828'}
+Produto{nome='Teste', valor=5000.00, quantidade=5}
+2020-03-30T00:06:35.580-03:00[America/Sao_Paulo]
+
+
+
