@@ -7,6 +7,10 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Class that represents a Produto Entity.
+ *
+ */
 @Data
 @Table(name = "TB_PRODUTO")
 @Entity

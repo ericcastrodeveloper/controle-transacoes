@@ -24,6 +24,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class that implements Transacao operations
+ *
+ */
 @Service
 public class TransacaoImpl implements TransacaoService {
 

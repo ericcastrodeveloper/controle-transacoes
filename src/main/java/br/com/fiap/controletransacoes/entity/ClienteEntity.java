@@ -7,6 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Class that represents a Cliente Entity.
+ *
+ */
 @Data
 @Table(name = "TB_CLIENTE")
 @Entity

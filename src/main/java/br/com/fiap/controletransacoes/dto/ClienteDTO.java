@@ -2,7 +2,10 @@ package br.com.fiap.controletransacoes.dto;
 
 import br.com.fiap.controletransacoes.entity.ClienteEntity;
 import lombok.Data;
-
+/**
+ * Data Transfer Object of ClienteEntity.
+ *
+ */
 @Data
 public class ClienteDTO {
 

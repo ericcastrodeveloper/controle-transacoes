@@ -10,6 +10,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Transfer Object of TransacaoEntity.
+ *
+ */
 @Data
 public class TransacaoDTO {
     @SerializedName("cliente")

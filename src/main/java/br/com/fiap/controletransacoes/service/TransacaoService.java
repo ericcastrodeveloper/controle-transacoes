@@ -7,6 +7,10 @@ import org.springframework.core.io.InputStreamResource;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Transacao Service
+ * Interface that contains Transacao operations
+ */
 public interface TransacaoService {
 
     List<TransacaoDTO> getAll();

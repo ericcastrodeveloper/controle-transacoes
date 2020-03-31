@@ -4,6 +4,10 @@ import br.com.fiap.controletransacoes.dto.ClienteDTO;
 
 import java.util.List;
 
+/**
+ * Cliente Service
+ * Interface that contains Cliente operations
+ */
 public interface ClienteService {
 
     List<ClienteDTO> getAll();

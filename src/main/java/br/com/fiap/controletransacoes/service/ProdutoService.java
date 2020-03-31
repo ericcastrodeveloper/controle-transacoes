@@ -3,7 +3,10 @@ package br.com.fiap.controletransacoes.service;
 import br.com.fiap.controletransacoes.dto.ProdutoDTO;
 
 import java.util.List;
-
+/**
+ * Produto Service
+ * Interface that contains Produto operations
+ */
 public interface ProdutoService {
 
     List<ProdutoDTO> getAll();

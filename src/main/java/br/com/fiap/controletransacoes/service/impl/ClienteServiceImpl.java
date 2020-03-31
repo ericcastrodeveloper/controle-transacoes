@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class that implements Cliente operations
+ *
+ */
 @Service
 public class ClienteServiceImpl implements ClienteService {
 

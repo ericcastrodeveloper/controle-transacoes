@@ -6,6 +6,10 @@ import br.com.fiap.controletransacoes.entity.ProdutoEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that map a Produto to ProdutoDTO
+ * or a ProdutoDTO to a Produto.
+ */
 public class ProdutoMapper {
 
     public static List<ProdutoDTO> toDto(List<ProdutoEntity> listaProdutoEntity){

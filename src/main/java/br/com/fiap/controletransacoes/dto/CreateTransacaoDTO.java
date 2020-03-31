@@ -5,7 +5,10 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.util.List;
-
+/**
+ * Data Transfer Object of TransacaoEntity.
+ *
+ */
 @Data
 public class CreateTransacaoDTO {
 
