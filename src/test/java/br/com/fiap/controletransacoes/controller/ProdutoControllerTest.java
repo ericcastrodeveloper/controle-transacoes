@@ -2,9 +2,7 @@ package br.com.fiap.controletransacoes.controller;
 
 import br.com.fiap.controletransacoes.dto.ProdutoDTO;
 import br.com.fiap.controletransacoes.entity.ProdutoEntity;
-import br.com.fiap.controletransacoes.entity.TransacaoEntity;
 import br.com.fiap.controletransacoes.repository.ProdutoRepository;
-import br.com.fiap.controletransacoes.repository.TransacaoRepository;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,7 +81,7 @@ public class ProdutoControllerTest {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$.nome", is(produtoDTO.getNome())))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

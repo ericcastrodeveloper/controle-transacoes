@@ -77,6 +77,8 @@ public class ProdutoServiceTest {
         produtoEntity.setValor(BigDecimal.valueOf(5000.00));
         produtoEntity.setNome("Teste");
         produtoEntity.setId(1);
+        produtoEntity.setListTransacaoEntity(new ArrayList<>());
+        produtoEntity.getListTransacaoEntity();
         return produtoEntity;
     }
 
@@ -85,6 +87,7 @@ public class ProdutoServiceTest {
         produtoDTO.setNome("Teste");
         produtoDTO.setQuantidade(5);
         produtoDTO.setValor(BigDecimal.valueOf(5000.00));
+        produtoDTO.toString();
         return produtoDTO;
     }
 

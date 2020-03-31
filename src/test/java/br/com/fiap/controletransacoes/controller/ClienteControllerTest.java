@@ -79,8 +79,7 @@ public class ClienteControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$.nome", is(clienteDTO.getNome())))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

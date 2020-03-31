@@ -3,8 +3,10 @@ package br.com.fiap.controletransacoes.controller;
 import br.com.fiap.controletransacoes.dto.ClienteDTO;
 import br.com.fiap.controletransacoes.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,7 +27,8 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ClienteDTO salvarCliente(@RequestBody ClienteDTO clienteDTO){
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClienteDTO salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO){
         return clienteService.salvarCliente(clienteDTO);
     }
 

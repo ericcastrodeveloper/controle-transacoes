@@ -3,3 +3,5 @@ spring.datasource.driverClassName=org.h2.Driver
 spring.datasource.username=fiap
 spring.datasource.password=fiap
 spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+extratoFile=extrato.txt
+portaH2=9090

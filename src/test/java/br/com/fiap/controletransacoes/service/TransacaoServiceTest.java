@@ -1,6 +1,7 @@
 package br.com.fiap.controletransacoes.service;
 
 import br.com.fiap.controletransacoes.dto.ClienteDTO;
+import br.com.fiap.controletransacoes.dto.CreateTransacaoDTO;
 import br.com.fiap.controletransacoes.dto.ProdutoDTO;
 import br.com.fiap.controletransacoes.dto.TransacaoDTO;
 import br.com.fiap.controletransacoes.entity.ClienteEntity;
@@ -15,10 +16,10 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +27,9 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 
 public class TransacaoServiceTest {
 
@@ -66,10 +68,11 @@ public class TransacaoServiceTest {
         when(clienteRepository.findById(anyString())).thenReturn(Optional.of(getClienteEntityMock()));
         when(transacaoRepository.save(any(TransacaoEntity.class))).thenReturn(getTransacaoEntityMock());
 
-        TransacaoDTO retorno = transacaoService.salvarTransacao(getTransacaoDTOMock());
+        TransacaoDTO retorno = transacaoService.salvarTransacao(getCreateTransacaoDTOMock());
 
         Assert.assertNotNull(retorno);
     }
+
 
     @Test
     public void atualizarTransacaoTest(){
@@ -88,21 +91,42 @@ public class TransacaoServiceTest {
     }
 
     @Test
-    public void getExtratoTest(){
+    public void getExtratoTest() throws IOException {
 
         List<TransacaoEntity> listTransacaoEntity = new ArrayList<>();
         listTransacaoEntity.add(getTransacaoEntityMock());
+        ReflectionTestUtils.setField(transacaoService, "extratoFile", "extrato.json");
+        when(transacaoRepository.findByClienteCpf(anyString())).thenReturn(listTransacaoEntity);
+
+        transacaoService.getExtrato("12345678910");
+    }
+
+    @Test
+    public void getExtratoTestEmpty() throws IOException {
+
+        List<TransacaoEntity> listTransacaoEntity = new ArrayList<>();
         when(transacaoRepository.findByClienteCpf(anyString())).thenReturn(listTransacaoEntity);
 
         transacaoService.getExtrato("12345678910");
     }
 
     @Test(expected = Exception.class)
-    public void getExtratoTestThrowFileNotFoundException(){
-
-        when(transacaoService.getByCliente(anyString())).thenThrow(Exception.class);
+    public void getExtratoTestThrowFileNotFoundException() throws IOException {
+        List<TransacaoEntity> listTransacaoEntity = new ArrayList<>();
+        listTransacaoEntity.add(getTransacaoEntityMock());
+        ReflectionTestUtils.setField(transacaoService, "extratoFile", "");
+        when(transacaoRepository.findByClienteCpf(anyString())).thenReturn(listTransacaoEntity);
 
         transacaoService.getExtrato("12345678910");
+    }
+
+    private CreateTransacaoDTO getCreateTransacaoDTOMock() {
+        CreateTransacaoDTO transacaoDTO = new CreateTransacaoDTO();
+        transacaoDTO.setListProdutoDTO(getProdutoDTOListMock());
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setCpf("12345678910");
+        transacaoDTO.setCpf(clienteDTO.getCpf());
+        return transacaoDTO;
     }
 
     private TransacaoEntity getTransacaoEntityMock(){
@@ -120,7 +144,8 @@ public class TransacaoServiceTest {
         clienteDTO.setCpf("12345678910");
         clienteDTO.setNome("teste");
         transacaoDTO.setClienteDTO(clienteDTO);
-        transacaoDTO.setDataTransacao(ZonedDateTime.now());
+        transacaoDTO.setDataTransacao(new Date().toString());
+        transacaoDTO.toString();
         return transacaoDTO;
     }
 

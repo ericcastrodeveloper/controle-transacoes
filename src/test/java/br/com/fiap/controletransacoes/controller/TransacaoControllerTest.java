@@ -1,6 +1,7 @@
 package br.com.fiap.controletransacoes.controller;
 
 import br.com.fiap.controletransacoes.dto.ClienteDTO;
+import br.com.fiap.controletransacoes.dto.CreateTransacaoDTO;
 import br.com.fiap.controletransacoes.dto.ProdutoDTO;
 import br.com.fiap.controletransacoes.dto.TransacaoDTO;
 import br.com.fiap.controletransacoes.entity.ClienteEntity;
@@ -11,7 +12,6 @@ import br.com.fiap.controletransacoes.repository.TransacaoRepository;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,12 +19,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,12 +61,11 @@ public class TransacaoControllerTest {
     public void getAllTest() throws Exception {
 
         TransacaoEntity transacaoEntity = getTransacaoEntityMock();
-        transacaoRepository.save(transacaoEntity);
+        transacaoEntity = transacaoRepository.save(transacaoEntity);
 
         this.mockMvc.perform(get("/transacoes")
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$[0].clienteDTO.cpf", is("12345678910")))
                 .andExpect(status().isOk());
     }
 
@@ -81,19 +78,15 @@ public class TransacaoControllerTest {
         this.mockMvc.perform(get("/transacoes/12345678910")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$[0].clienteDTO.cpf", is("12345678910")))
+                .andExpect(jsonPath("$[0].cliente.cpf", is("12345678910")))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void salvarTransacaoTest() throws Exception {
-
-//        TransacaoEntity transacaoEntity = getTransacaoEntityMock();
-//        transacaoRepository.save(transacaoEntity);
-
         Gson gson = new Gson();
 
-        String transacaoDTOString = gson.toJson(getTransacaoDTOMock());
+        String transacaoDTOString = gson.toJson(getCreateTransacaoDTOMock());
 
         this.mockMvc.perform(post("/transacoes/")
                 .content(transacaoDTOString)
@@ -101,8 +94,8 @@ public class TransacaoControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$.clienteDTO.cpf", is("12345678910")))
-                .andExpect(status().isOk());
+                .andExpect(jsonPath("$.cliente.cpf", is("12345678910")))
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -121,7 +114,7 @@ public class TransacaoControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$.clienteDTO.cpf", is("12345678910")))
+                .andExpect(jsonPath("$.cliente.cpf", is("12345678910")))
                 .andExpect(status().isOk());
     }
 
@@ -173,7 +166,17 @@ public class TransacaoControllerTest {
         transacaoEntity.setCliente(getClienteEntityMock());
         transacaoEntity.setListaProduto(getProdutoEntityListMock());
         transacaoEntity.setDataTransacao(new Date());
+        transacaoEntity.setValorTotal(BigDecimal.valueOf(5000));
         return transacaoEntity;
+    }
+
+    private CreateTransacaoDTO getCreateTransacaoDTOMock() {
+        CreateTransacaoDTO transacaoDTO = new CreateTransacaoDTO();
+        transacaoDTO.setListProdutoDTO(getProdutoDTOListMock());
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setCpf("12345678910");
+        transacaoDTO.setCpf(clienteDTO.getCpf());
+        return transacaoDTO;
     }
 
     private TransacaoDTO getTransacaoDTOMock(){
@@ -183,6 +186,7 @@ public class TransacaoControllerTest {
         clienteDTO.setCpf("12345678910");
         clienteDTO.setNome("teste");
         transacaoDTO.setClienteDTO(clienteDTO);
+        transacaoDTO.setValorTotal(BigDecimal.valueOf(5000));
         return transacaoDTO;
     }
 

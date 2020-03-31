@@ -1,6 +1,10 @@
 spring:
   datasource:
-    url: jdbc:h2:~/fiapcartoes;DB_CLOSE_ON_EXIT=FALSE
+#    url: jdbc:h2:tcp://localhost/server~/fiapcartoes;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+
+#    url: jdbc:h2:~/mydb
+#    url: jdbc:h2:tcp://localhost:9090/mem:mydb
+    url: jdbc:h2:~/mydb
     username: fiap
     password: fiap
 
@@ -10,3 +14,9 @@ spring:
         true
       path:
         /h2
+
+extratoFile:
+  extrato.json
+
+portaH2:
+  9090

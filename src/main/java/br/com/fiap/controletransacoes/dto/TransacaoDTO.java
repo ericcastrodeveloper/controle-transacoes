@@ -2,20 +2,28 @@ package br.com.fiap.controletransacoes.dto;
 
 import br.com.fiap.controletransacoes.entity.ProdutoEntity;
 import br.com.fiap.controletransacoes.entity.TransacaoEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class TransacaoDTO {
-
+    @SerializedName("cliente")
+    @JsonProperty("cliente")
     private ClienteDTO clienteDTO;
+    @SerializedName("lista_produtos")
+    @JsonProperty("lista_produtos")
     private List<ProdutoDTO> listProdutoDTO;
-    private ZonedDateTime dataTransacao;
+    @SerializedName("data_transacao")
+    @JsonProperty("data_transacao")
+    private String dataTransacao;
+    @SerializedName("valor_total")
+    @JsonProperty("valor_total")
+    private BigDecimal valorTotal;
 
     public TransacaoDTO() {
     }
@@ -38,14 +46,8 @@ public class TransacaoDTO {
 
         this.setListProdutoDTO(listaProdutoDTO);
 
-        this.setDataTransacao(convertToZonedDateTime(transacaoEntity.getDataTransacao()));
-    }
-
-    private ZonedDateTime convertToZonedDateTime(Date dataCriacao) {
-        if(dataCriacao!= null)
-            return ZonedDateTime.ofInstant(dataCriacao.toInstant(), ZoneOffset.systemDefault());
-        else
-            return null;
+        this.setValorTotal(transacaoEntity.getValorTotal());
+        this.setDataTransacao((transacaoEntity.getDataTransacao().toString()));
     }
 
     @Override
