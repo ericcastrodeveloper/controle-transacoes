@@ -1,10 +1,6 @@
 spring:
   datasource:
-#    url: jdbc:h2:tcp://localhost/server~/fiapcartoes;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
-
-#    url: jdbc:h2:~/mydb
-#    url: jdbc:h2:tcp://localhost:9090/mem:mydb
-    url: jdbc:h2:~/mydb
+    url: jdbc:h2:mem:mydb
     username: fiap
     password: fiap
 
