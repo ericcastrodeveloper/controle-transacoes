@@ -19,4 +19,5 @@ public interface TransacaoService {
     TransacaoDTO atualizarTransacao(Integer id, TransacaoDTO transacaoDTO);
     void deletarTransacao( Integer id);
     InputStreamResource getExtrato(String cpf) throws IOException;
+    InputStreamResource getExtratoByCartao(Integer id) throws IOException;
 }

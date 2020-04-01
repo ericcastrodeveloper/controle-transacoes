@@ -18,5 +18,8 @@ public class CreateTransacaoDTO {
     @SerializedName("lista_produtos")
     @JsonProperty("lista_produtos")
     private List<ProdutoDTO> listProdutoDTO;
+    @SerializedName("cartao")
+    @JsonProperty("cartao")
+    private CartaoDTO cartaoDTO;
 
 }

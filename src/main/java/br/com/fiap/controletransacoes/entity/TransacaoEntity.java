@@ -4,6 +4,8 @@ package br.com.fiap.controletransacoes.entity;
 import br.com.fiap.controletransacoes.dto.CreateTransacaoDTO;
 import br.com.fiap.controletransacoes.dto.ProdutoDTO;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,7 +19,8 @@ import java.util.List;
  * Class that represents a Transacao Entity.
  *
  */
-@Data
+@Getter
+@Setter
 @Table(name = "TB_TRANSACAO")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -33,6 +36,9 @@ public class TransacaoEntity {
             joinColumns={@JoinColumn(name="TRANSACAO_ID")},
             inverseJoinColumns={@JoinColumn(name="PRODUTO_ID")})
     private List<ProdutoEntity> listaProduto;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cartao_id")
+    private CartaoEntity cartaoEntity;
     @Column(name = "data_transacao")
     @CreatedDate
     private Date dataTransacao;
@@ -56,6 +62,7 @@ public class TransacaoEntity {
 
             listProdutoEntity.add(produtoEntity);
         }
+        this.cartaoEntity = new CartaoEntity(transacaoDTO.getCartaoDTO());
         this.setListaProduto(listProdutoEntity);
 
     }

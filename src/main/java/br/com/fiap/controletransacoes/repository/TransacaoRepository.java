@@ -16,4 +16,10 @@ public interface TransacaoRepository extends JpaRepository<TransacaoEntity, Inte
      */
     List<TransacaoEntity>  findByClienteCpf(String cpf);
 
+    /**
+     * Method that retrieves a TransacaoEntity by a Cartao id
+     * @param id ID identifier of a Cartao to be retrieved
+     */
+    List<TransacaoEntity> findByCartaoEntityId(Integer id);
+
 }

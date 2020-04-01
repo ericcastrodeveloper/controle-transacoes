@@ -2,10 +2,12 @@ package br.com.fiap.controletransacoes.service.impl;
 
 import br.com.fiap.controletransacoes.dto.CreateTransacaoDTO;
 import br.com.fiap.controletransacoes.dto.TransacaoDTO;
+import br.com.fiap.controletransacoes.entity.CartaoEntity;
 import br.com.fiap.controletransacoes.entity.ClienteEntity;
 import br.com.fiap.controletransacoes.entity.ProdutoEntity;
 import br.com.fiap.controletransacoes.entity.TransacaoEntity;
 import br.com.fiap.controletransacoes.mapper.ProdutoMapper;
+import br.com.fiap.controletransacoes.mapper.TransacaoMapper;
 import br.com.fiap.controletransacoes.repository.ClienteRepository;
 import br.com.fiap.controletransacoes.repository.TransacaoRepository;
 import br.com.fiap.controletransacoes.service.TransacaoService;
@@ -49,10 +51,7 @@ public class TransacaoImpl implements TransacaoService {
     }
 
     public TransacaoDTO salvarTransacao(CreateTransacaoDTO createTransacaoDTO){
-
-
         TransacaoEntity transacaoEntity = new TransacaoEntity(createTransacaoDTO);
-
 
         BigDecimal valorTotal = setValorTotal(transacaoEntity);
         transacaoEntity.setValorTotal(valorTotal);
@@ -70,6 +69,8 @@ public class TransacaoImpl implements TransacaoService {
 
         transacaoEntity.setListaProduto(listProdutoEntity);
 
+        transacaoEntity.setCartaoEntity(new CartaoEntity(transacaoDTO.getCartaoDTO()));
+
         transacaoEntity.setCliente(new ClienteEntity(transacaoDTO.getClienteDTO()));
 
         return new TransacaoDTO(transacaoRepository.save(transacaoEntity));
@@ -85,6 +86,30 @@ public class TransacaoImpl implements TransacaoService {
 
 
         List<TransacaoDTO> listTransacao = getByCliente(cpf);
+
+        if(listTransacao.size() > 0){
+
+            InputStreamResource resource = null;
+
+            try{
+                File file = escreverExtrato(listTransacao);
+
+                resource = new InputStreamResource(new FileInputStream(file));
+            }catch(IOException e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            return resource;
+        }
+        return null;
+    }
+
+    @Override
+    public InputStreamResource getExtratoByCartao(Integer id) throws IOException {
+        List<TransacaoEntity> listTransacaoEntity = transacaoRepository.findByCartaoEntityId(id);
+
+        List<TransacaoDTO> listTransacao = TransacaoMapper.toDtoList(listTransacaoEntity);
 
         if(listTransacao.size() > 0){
 

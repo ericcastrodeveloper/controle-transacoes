@@ -20,11 +20,4 @@ public class ClienteDTO {
         this.cpf = clienteEntity.getCpf();
     }
 
-    @Override
-    public String toString() {
-        return "Cliente {" +
-                "nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
-                '}';
-    }
 }

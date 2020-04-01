@@ -9,6 +9,7 @@ import br.com.fiap.controletransacoes.entity.ProdutoEntity;
 import br.com.fiap.controletransacoes.entity.TransacaoEntity;
 import br.com.fiap.controletransacoes.repository.ClienteRepository;
 import br.com.fiap.controletransacoes.repository.TransacaoRepository;
+import br.com.fiap.controletransacoes.utils.MockObjectsUtils;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,13 +55,13 @@ public class TransacaoControllerTest {
 
     @Before
     public void setUp(){
-        clienteRepository.save(getClienteEntityMock());
+        clienteRepository.save(MockObjectsUtils.getClienteEntityMock());
     }
 
     @Test
     public void getAllTest() throws Exception {
 
-        TransacaoEntity transacaoEntity = getTransacaoEntityMock();
+        TransacaoEntity transacaoEntity = MockObjectsUtils.getTransacaoEntityMock();
         transacaoEntity = transacaoRepository.save(transacaoEntity);
 
         this.mockMvc.perform(get("/transacoes")
@@ -72,7 +73,7 @@ public class TransacaoControllerTest {
     @Test
     public void getByIdTest() throws Exception {
 
-        TransacaoEntity transacaoEntity = getTransacaoEntityMock();
+        TransacaoEntity transacaoEntity = MockObjectsUtils.getTransacaoEntityMock();
         transacaoRepository.save(transacaoEntity);
 
         this.mockMvc.perform(get("/transacoes/12345678910")
@@ -84,9 +85,10 @@ public class TransacaoControllerTest {
 
     @Test
     public void salvarTransacaoTest() throws Exception {
+        TransacaoEntity transacaoEntity = MockObjectsUtils.getTransacaoEntityMock();
+        transacaoRepository.save(transacaoEntity);
         Gson gson = new Gson();
-
-        String transacaoDTOString = gson.toJson(getCreateTransacaoDTOMock());
+        String transacaoDTOString = gson.toJson(MockObjectsUtils.getCreateTransacaoDTOMock());
 
         this.mockMvc.perform(post("/transacoes/")
                 .content(transacaoDTOString)
@@ -101,12 +103,12 @@ public class TransacaoControllerTest {
     @Test
     public void atualizarTransacaoTest() throws Exception {
 
-        TransacaoEntity transacaoEntity = getTransacaoEntityMock();
+        TransacaoEntity transacaoEntity = transacaoRepository.findByClienteCpf("12345678910").get(1);
         transacaoEntity = transacaoRepository.save(transacaoEntity);
 
         Gson gson = new Gson();
 
-        String transacaoDTOString = gson.toJson(getTransacaoDTOMock());
+        String transacaoDTOString = gson.toJson(MockObjectsUtils.getTransacaoDTOMock());
 
         this.mockMvc.perform(put("/transacoes/{id}", transacaoEntity.getId())
                 .content(transacaoDTOString)
@@ -121,12 +123,12 @@ public class TransacaoControllerTest {
     @Test
     public void deletarTransacaoTest() throws Exception {
 
-        TransacaoEntity transacaoEntity = getTransacaoEntityMock();
+        TransacaoEntity transacaoEntity = MockObjectsUtils.getTransacaoEntityMock();
         transacaoEntity = transacaoRepository.save(transacaoEntity);
 
         Gson gson = new Gson();
 
-        String transacaoDTOString = gson.toJson(getTransacaoDTOMock());
+        String transacaoDTOString = gson.toJson(MockObjectsUtils.getTransacaoDTOMock());
 
         this.mockMvc.perform(delete("/transacoes/{id}", transacaoEntity.getId())
                 .content(transacaoDTOString)
@@ -140,7 +142,7 @@ public class TransacaoControllerTest {
     @Test
     public void getExtratoTest() throws Exception {
 
-        TransacaoEntity transacaoEntity = getTransacaoEntityMock();
+        TransacaoEntity transacaoEntity = MockObjectsUtils.getTransacaoEntityMock();
         transacaoEntity = transacaoRepository.save(transacaoEntity);
 
 
@@ -159,71 +161,27 @@ public class TransacaoControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    public void getExtratoCartaoTest() throws Exception {
 
+        TransacaoEntity transacaoEntity = MockObjectsUtils.getTransacaoEntityMock();
+        transacaoEntity = transacaoRepository.save(transacaoEntity);
 
-    private TransacaoEntity getTransacaoEntityMock(){
-        TransacaoEntity transacaoEntity = new TransacaoEntity();
-        transacaoEntity.setCliente(getClienteEntityMock());
-        transacaoEntity.setListaProduto(getProdutoEntityListMock());
-        transacaoEntity.setDataTransacao(new Date());
-        transacaoEntity.setValorTotal(BigDecimal.valueOf(5000));
-        return transacaoEntity;
+        List<TransacaoEntity> listTransacaoEntity = transacaoEntity.getCartaoEntity().getListaTransacoes();
+
+        this.mockMvc.perform(get("/transacoes/download-extrato-cartao/{id}", transacaoEntity.getCartaoEntity().getId())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
-    private CreateTransacaoDTO getCreateTransacaoDTOMock() {
-        CreateTransacaoDTO transacaoDTO = new CreateTransacaoDTO();
-        transacaoDTO.setListProdutoDTO(getProdutoDTOListMock());
-        ClienteDTO clienteDTO = new ClienteDTO();
-        clienteDTO.setCpf("12345678910");
-        transacaoDTO.setCpf(clienteDTO.getCpf());
-        return transacaoDTO;
-    }
+    @Test
+    public void getExtratoCartaoTestFail() throws Exception {
 
-    private TransacaoDTO getTransacaoDTOMock(){
-        TransacaoDTO transacaoDTO = new TransacaoDTO();
-        transacaoDTO.setListProdutoDTO(getProdutoDTOListMock());
-        ClienteDTO clienteDTO = new ClienteDTO();
-        clienteDTO.setCpf("12345678910");
-        clienteDTO.setNome("teste");
-        transacaoDTO.setClienteDTO(clienteDTO);
-        transacaoDTO.setValorTotal(BigDecimal.valueOf(5000));
-        return transacaoDTO;
-    }
-
-    private List<ProdutoDTO> getProdutoDTOListMock() {
-
-        List<ProdutoDTO> listProdutoDTO = new ArrayList<>();
-
-        for(int i= 0; i < 10; i++){
-            ProdutoDTO produtoDTO = new ProdutoDTO();
-            produtoDTO.setValor(BigDecimal.valueOf(i));
-            produtoDTO.setQuantidade(i);
-            produtoDTO.setNome("Produto "+i);
-            listProdutoDTO.add(produtoDTO);
-        }
-        return listProdutoDTO;
-    }
-
-    private List<ProdutoEntity> getProdutoEntityListMock() {
-
-        List<ProdutoEntity> listProdutoEntity = new ArrayList<>();
-
-        for(int i= 0; i < 10; i++){
-            ProdutoEntity produtoEntity = new ProdutoEntity();
-            produtoEntity.setValor(BigDecimal.valueOf(i));
-            produtoEntity.setQuantidade(i);
-            produtoEntity.setNome("Produto "+i);
-            listProdutoEntity.add(produtoEntity);
-        }
-        return listProdutoEntity;
-    }
-
-    private ClienteEntity getClienteEntityMock(){
-        ClienteEntity clienteEntity = new ClienteEntity();
-
-        clienteEntity.setNome("teste");
-        clienteEntity.setCpf("12345678910");
-        return clienteEntity;
+        this.mockMvc.perform(get("/transacoes/download-extrato-cartao/{id}", 20)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
     }
 
 }

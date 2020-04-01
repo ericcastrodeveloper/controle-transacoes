@@ -4,6 +4,7 @@ import br.com.fiap.controletransacoes.dto.CreateTransacaoDTO;
 import br.com.fiap.controletransacoes.dto.TransacaoDTO;
 import br.com.fiap.controletransacoes.service.TransacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,18 +24,38 @@ import java.util.List;
 @RequestMapping("transacoes")
 public class TransacaoController {
 
+    @Value("${extratoFile}")
+    private String extratoFile;
+
     @Autowired
     private TransacaoService transacaoService;
 
+    /**
+     * Download a file with transactions by a Cliente cpf.
+     * @param cpf identifier of Client to be retrieved
+     */
     @GetMapping("/download-extrato/{cpf}")
     public ResponseEntity<InputStreamResource> getExtrato(@PathVariable String cpf) throws IOException {
 
         InputStreamResource resource = transacaoService.getExtrato(cpf);
         if(resource != null)
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + "extrato.json")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + extratoFile)
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
+        else
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/download-extrato-cartao/{id}")
+    public ResponseEntity<InputStreamResource> getExtratoCartao(@PathVariable Integer id) throws IOException {
+
+        InputStreamResource resource = transacaoService.getExtratoByCartao(id);
+        if(resource != null)
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + "extrato.json")
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .body(resource);
         else
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -28,6 +28,9 @@ public class TransacaoDTO {
     @SerializedName("valor_total")
     @JsonProperty("valor_total")
     private BigDecimal valorTotal;
+    @SerializedName("cartao")
+    @JsonProperty("cartao")
+    private CartaoDTO cartaoDTO;
 
     public TransacaoDTO() {
     }
@@ -48,18 +51,12 @@ public class TransacaoDTO {
             listaProdutoDTO.add(produtoDTO);
         }
 
+        this.cartaoDTO = new CartaoDTO(transacaoEntity.getCartaoEntity());
+
         this.setListProdutoDTO(listaProdutoDTO);
 
         this.setValorTotal(transacaoEntity.getValorTotal());
         this.setDataTransacao((transacaoEntity.getDataTransacao().toString()));
     }
 
-    @Override
-    public String toString() {
-        return "Transacao:" +
-                "\r\n" + clienteDTO +
-                "\r\n" + listProdutoDTO +
-                "\r\ndataTransacao=" + dataTransacao +
-                "\r\n";
-    }
 }
