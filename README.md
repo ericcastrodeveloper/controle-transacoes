@@ -8,9 +8,9 @@ Para executar a aplicação
 4. executar o comando java -jar "nome_aplicação.jar"
 
 A aplicação já inicia com uma massa de dados cadastrados em banco H2 por arquivo:
-  Lista de Produtos
-  Lista de Clientes
-  Lista de Transações
+		Lista de Produtos,
+  	Lista de Clientes e
+  	Lista de Transações
  
 Swagger:
 http://localhost:8080/swagger-ui.html 
